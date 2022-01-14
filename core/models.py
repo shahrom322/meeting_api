@@ -1,6 +1,8 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
 
+from core.managers import CustomUserManager
+
 
 class CustomUser(AbstractBaseUser):
     """Модель пользователя."""
@@ -17,6 +19,8 @@ class CustomUser(AbstractBaseUser):
     email = models.EmailField('Почта', unique=True)
 
     USERNAME_FIELD = 'email'
+
+    objects = CustomUserManager()
 
     def __str__(self):
         return f'{self.email}'
