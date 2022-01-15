@@ -26,6 +26,7 @@ class CustomUser(AbstractBaseUser):
         'self', blank=True, symmetrical=False,
         verbose_name='Лайки пользователям', related_name='likes_from'
     )
+    # Яндекс карты возвращает значение координат в формате xx.xxxxxx, xx.xxxxxx.
     longitude = models.DecimalField(
         'Долгота', max_digits=9, decimal_places=6, blank=True, null=True
     )

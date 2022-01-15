@@ -9,8 +9,8 @@ class CreateCustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = [
-            'avatar', 'sex', 'first_name',
-            'last_name', 'email', 'password',
+            'avatar', 'sex', 'first_name', 'last_name',
+            'email', 'password', 'latitude', 'longitude'
         ]
 
     def create(self, validated_data):
