@@ -6,3 +6,6 @@ python-decouple
 django-filter
 geopy
 gunicorn
+psycopg2
+dj-database-url
+whitenoise
