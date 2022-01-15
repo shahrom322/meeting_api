@@ -1,7 +1,7 @@
 from rest_framework import generics, permissions
 
 from core.models import CustomUser
-from core.serializers import CreateCustomUserSerializer
+from core.serializers import CreateCustomUserSerializer, UserMatchSerializer
 
 
 class CreateUserAPIView(generics.CreateAPIView):
@@ -10,3 +10,20 @@ class CreateUserAPIView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CreateCustomUserSerializer
     permission_classes = [permissions.AllowAny]
+
+
+class UserMatchAPIView(generics.RetrieveAPIView):
+    """API контроллер для отправки пользователю лайка.
+    path 'clients/<int:pk>/match/' где pk это идентификатор пользователя,
+    которому предназначен лайк """
+
+    serializer_class = UserMatchSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        user = self.request.user
+        like_for_user = generics.get_object_or_404(
+            CustomUser, id=self.kwargs['pk']
+        )
+        user.like_user(like_for_user)
+        return like_for_user

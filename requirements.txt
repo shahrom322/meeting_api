@@ -2,3 +2,4 @@ flake8
 Django
 djangorestframework
 Pillow
+python-decouple

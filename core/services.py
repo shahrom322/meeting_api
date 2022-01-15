@@ -1,6 +1,7 @@
 import io
 
 from PIL import Image
+from django.core.mail import send_mail
 
 
 def watermark_photo(input_image_path):
@@ -25,3 +26,17 @@ def watermark_photo(input_image_path):
         img_io = io.BytesIO()
         rgb_image.save(img_io, format='JPEG')
         return io.BytesIO(img_io.getvalue())
+
+
+def send_message(user, address):
+    """Отправляет письмо о взаимной симпатии.
+    :param user: CustomUser который будет указан в письме.
+    :param address: почтовый адрес, на который будет отправлено письмо."""
+
+    return send_mail(
+        'У Вас взаимная симпатия.',
+        f'Вы понравились {user.first_name}! Почта участника: {user.email}',
+        None,
+        [address],
+        fail_silently=False
+    )

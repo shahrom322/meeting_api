@@ -16,3 +16,11 @@ class CreateCustomUserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = CustomUser.objects.create_user(**validated_data)
         return user
+
+
+class UserMatchSerializer(serializers.ModelSerializer):
+    """Класс сериалайзера для отображения почты пользователя."""
+
+    class Meta:
+        model = CustomUser
+        fields = ['email']
