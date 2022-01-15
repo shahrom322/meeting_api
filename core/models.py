@@ -26,6 +26,12 @@ class CustomUser(AbstractBaseUser):
         'self', blank=True, symmetrical=False,
         verbose_name='Лайки пользователям', related_name='likes_from'
     )
+    longitude = models.DecimalField(
+        'Долгота', max_digits=9, decimal_places=6, blank=True, null=True
+    )
+    latitude = models.DecimalField(
+        'Широта', max_digits=9, decimal_places=6, blank=True, null=True
+    )
 
     def like_user(self, user):
         """Добавляет в QuerySet likes_for_users переданный объект

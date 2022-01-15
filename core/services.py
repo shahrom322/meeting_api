@@ -2,6 +2,7 @@ import io
 
 from PIL import Image
 from django.core.mail import send_mail
+from geopy.distance import geodesic
 
 
 def watermark_photo(input_image_path):
@@ -10,7 +11,7 @@ def watermark_photo(input_image_path):
     :return io.BytesIO: Новая фотография возвращается из буфера в байтовом
      формате."""
 
-    with Image.open(input_image_path) as base_image,\
+    with Image.open(input_image_path) as base_image, \
             Image.open('watermark/watermark_sample.png') as watermark:
         width, height = base_image.size
         # Создаем новое изображение с такими же размерами,
@@ -40,3 +41,15 @@ def send_message(user, address):
         [address],
         fail_silently=False
     )
+
+
+def get_distance(first_user_coords: tuple,
+                 second_user_coords: tuple
+                 ) -> float:
+    """Рассчитывает расстояние между двумя пользователями.
+    :param first_user_coords: Кортеж координат (широта, долгота) начальной точки.
+    :param second_user_coords: Кортеж координат (широта, долгота) точки до которой
+    рассчитываем координаты.
+    :return float: Расстояние в километрах."""
+
+    return geodesic(first_user_coords, second_user_coords).kilometers

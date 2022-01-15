@@ -36,7 +36,7 @@ class UserMatchAPIView(generics.RetrieveAPIView):
 
 class UserListAPIView(generics.ListAPIView):
     """API контроллер для вывода списка пользователей с возможностью фильтрации по
-    полу, имени и фамилии."""
+    полу, имени, фамилии и максимального расстояния в километрах."""
 
     queryset = CustomUser.objects.all()
     serializer_class = UserListSerializer
