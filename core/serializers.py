@@ -9,7 +9,7 @@ class CreateCustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = [
-            'avatar', 'male', 'first_name',
+            'avatar', 'sex', 'first_name',
             'last_name', 'email', 'password',
         ]
 
@@ -24,3 +24,13 @@ class UserMatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['email']
+
+
+class UserListSerializer(serializers.ModelSerializer):
+    """Класс сериалайзера для отображения списка пользователей."""
+
+    class Meta:
+        model = CustomUser
+        fields = [
+            'id', 'avatar', 'sex', 'first_name', 'last_name'
+        ]

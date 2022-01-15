@@ -1,7 +1,12 @@
 from rest_framework import generics, permissions
 
+from core.filters import UserFilter
 from core.models import CustomUser
-from core.serializers import CreateCustomUserSerializer, UserMatchSerializer
+from core.serializers import (
+    CreateCustomUserSerializer,
+    UserMatchSerializer,
+    UserListSerializer
+)
 
 
 class CreateUserAPIView(generics.CreateAPIView):
@@ -27,3 +32,13 @@ class UserMatchAPIView(generics.RetrieveAPIView):
         )
         user.like_user(like_for_user)
         return like_for_user
+
+
+class UserListAPIView(generics.ListAPIView):
+    """API контроллер для вывода списка пользователей с возможностью фильтрации по
+    полу, имени и фамилии."""
+
+    queryset = CustomUser.objects.all()
+    serializer_class = UserListSerializer
+    filter_class = UserFilter
+    permission_classes = [permissions.IsAuthenticated]
