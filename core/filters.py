@@ -1,7 +1,8 @@
 import django_filters
+from django.db.models import F
+from django.db.models.functions import Sin, Cos, ACos, Radians
 
 from core.models import CustomUser
-from core.services import get_distance
 
 
 class UserFilter(django_filters.FilterSet):
@@ -17,15 +18,24 @@ class UserFilter(django_filters.FilterSet):
 
         current_user = self.request.user
         possible_users = queryset.exclude(id=current_user.id)
-        result_id_list = []
-        for possible_user in possible_users:
-            distance = get_distance(
-                (current_user.latitude, current_user.longitude),
-                (possible_user.latitude, possible_user.longitude)
+        # Рассчитываем расстояние на поверхности земли по формуле:
+        #       cos(d) = sin(φА)·sin(φB) + cos(φА)·cos(φB)·cos(λА − λB),
+        # где φА и φB — широты, λА, λB — долготы данных точек,
+        # d — расстояние между пунктами, измеряемое в радианах длиной дуги большого круга земного шара.
+
+        # Расстояние между пунктами, измеряемое в километрах, определяется по формуле:
+        #       L = d·R,
+        # где R = 6399 км — средний радиус земного шара
+        # http://osiktakan.ru/geo_koor.htm
+
+        queryset = possible_users.annotate(
+            distance=6399 * (ACos(
+                Sin(Radians(F('latitude'))) * Sin(Radians(current_user.latitude)) +
+                Cos(Radians(F('latitude'))) * Cos(Radians(current_user.latitude)) *
+                Cos(Radians(F('longitude')) - Radians(current_user.longitude)))
             )
-            if distance < float(value):
-                result_id_list.append(possible_user.id)
-        return queryset.filter(id__in=result_id_list)
+        ).filter(distance__lte=value)
+        return queryset
 
     class Meta:
         model = CustomUser
