@@ -22,6 +22,7 @@ class UserMatchAPIView(generics.RetrieveAPIView):
     path 'clients/<int:pk>/match/' где pk это идентификатор пользователя,
     которому предназначен лайк """
 
+    queryset = CustomUser.objects.all()
     serializer_class = UserMatchSerializer
     permission_classes = [permissions.IsAuthenticated]
 
